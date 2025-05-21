@@ -1,13 +1,17 @@
 function GameBoard(){
+
     let rows = 3;
     let columns = 3;
     let board = [];
+    //make 2D board of 3*3
     for(let i = 0; i < rows; i++){
         board[i] = [];
         for(let i = 0; i < columns; i++){
-            board[i].push();
+            board[i].push(Cell());
         }
     }
+
+
 }
 function Cell(){
     let value = 0;
