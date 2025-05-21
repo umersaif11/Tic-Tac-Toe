@@ -27,13 +27,20 @@ function GameBoard(){
 
         //if there are available cell then assign token
         board[row][col].addToken(playerToken);
+    };
 
-    }
+    //function to print all current values in board array
+    const printBoard = () => {
+        const boardWithCellValues = board.map((row) =>
+        row.map((cell) => cell.getValue()));
+
+        console.log(boardWithCellValues);
+    };
 
     return {
         getBoard,
         dropToken,
-
+        printBoard
     }
 }
 function Cell(){
