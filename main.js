@@ -43,6 +43,7 @@ function GameBoard(){
         printBoard
     }
 }
+
 function Cell(){
     let value = 0;
     
@@ -58,5 +59,42 @@ function Cell(){
     };
 }
 
-let game = GameBoard();
-game.dropToken(0,2,'X');
+function GameController(
+    playerOneName = "Player One",
+    playerTwoName = "Player Two"
+){
+    const board = GameBoard();
+
+    const players = [
+        {
+            name: playerOneName,
+            token: 'X'
+        },
+        {
+            name: playerTwoName,
+            token: 'O'
+        }
+    ];
+
+    let activePlayer = players[0];
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    let getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`)
+    }
+
+    const playRound = (row, col) => {
+        console.log(`Dropping ${getActivePlayer().name}'s token
+        into row ${row} and column ${col}.`);
+
+        board.dropToken
+    }
+
+
+}    
