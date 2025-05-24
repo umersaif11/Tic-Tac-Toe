@@ -14,13 +14,13 @@ function GameBoard(){
 
     const getBoard = () => board;
 
+    //first check availability of cells in board
+    const availableCells = board.map((row) => 
+    row.filter((cell) => cell.getValue() === 0)
+    ).flat();
+
     //function to play each round by players
     const dropToken = (row, col, playerToken) => {
-
-        //first check availability of cells in board
-        const availableCells = board.map((row) => 
-        row.filter((cell) => cell.getValue() === 0)
-        ).flat();
 
         //if no cells then stop execution
         if(!availableCells.length) return;
@@ -62,10 +62,40 @@ function GameBoard(){
         }
     }
 
+    //function to check tie match in all rows
+    const rowTieCheck = () =>{
+        if(!availableCells.length){
+            if(!rowWinCheck(0, 'X') &&
+            !rowWinCheck(1, 'X') &&
+            !rowWinCheck(2, 'X') &&
+            !rowWinCheck(0, 'O') &&
+            !rowWinCheck(1, 'O') &&
+            !rowWinCheck(2, 'O')){
+                return true;
+            }
+        }
+    }
+
+    //function to check tie match in all columns
+    const colTieCheck = () =>{
+        if(!availableCells.length){
+            if(!columnWinCheck(0, 'X') &&
+            !columnWinCheck(1, 'X') &&
+            !columnWinCheck(2, 'X') &&
+            !columnWinCheck(0, 'O') &&
+            !columnWinCheck(1, 'O') &&
+            !columnWinCheck(2, 'O')){
+                return true;
+            }
+        }
+    }
+
     return {
         getBoard,
         dropToken,
-        printBoard
+        printBoard,
+        rowWinCheck,
+        columnWinCheck
     }
 }
 
