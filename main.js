@@ -90,12 +90,25 @@ function GameBoard(){
         }
     }
 
+    const gameOver = () => {
+        console.log("Game Over!");
+        for(let i = 0; i < rows; i++){
+            for(let i = 0; i < columns; i++){
+                board[i][j] = 0;
+            }
+        }
+        printBoard();
+    }
+
     return {
         getBoard,
         dropToken,
         printBoard,
         rowWinCheck,
-        columnWinCheck
+        columnWinCheck,
+        rowTieCheck,
+        colTieCheck,
+        gameOver
     }
 }
 
@@ -150,7 +163,14 @@ function GameController(
 
         board.dropToken(row, col, getActivePlayer().token);
 
-
+        //check whether current player has combination
+        //in mentioned row
+        if(board.rowWinCheck(row, getActivePlayer().token)){
+            console.log(`${getActivePlayer().name} wins at row ${row}.`);
+            board.printBoard();
+            board.gameOver();
+            return;
+        }
 
         switchPlayerTurn();
         printNewRound();
