@@ -172,6 +172,15 @@ function GameController(
             return;
         }
 
+        //check whether current player has combination
+        //in mentioned column
+        if(board.columnWinCheck(col, getActivePlayer().token)){
+            console.log(`${getActivePlayer().name} wins at column ${r}col`);
+            board.printBoard();
+            board.gameOver();
+            return;
+        }
+
         switchPlayerTurn();
         printNewRound();
     }
