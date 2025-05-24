@@ -38,8 +38,9 @@ function GameBoard(){
     };
 
     //function to get specific column
-    const boardColumn = (arr, col) => arr.map(row => row[col]);
+    const boardColumn = (col) => board.map(row => row[col]);
 
+    //function to check winner in a specific row
     const rowWinCheck = (row, playerToken) =>{
         for(let j = 0; j < columns; j++){
             if(board[row][j] !== playerToken){
