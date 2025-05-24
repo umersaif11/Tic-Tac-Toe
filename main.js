@@ -50,6 +50,18 @@ function GameBoard(){
         }
     }
 
+    //function to check winner in a specific column
+    const columnWinCheck = (column, playerToken) => {
+        const columnToCheck = boardColumn(column);
+
+        for(let i = 0; i < columnToCheck.length; i++){
+            if(columnToCheck[i] !== playerToken){
+                return false;
+            }
+            return true;
+        }
+    }
+
     return {
         getBoard,
         dropToken,
