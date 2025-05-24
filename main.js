@@ -37,6 +37,18 @@ function GameBoard(){
         console.log(boardWithCellValues);
     };
 
+    //function to get specific column
+    const boardColumn = (arr, col) => arr.map(row => row[col]);
+
+    const rowWinCheck = (row, playerToken) =>{
+        for(let j = 0; j < columns; j++){
+            if(board[row][j] !== playerToken){
+                return false;
+            }
+            return true;
+        }
+    }
+
     return {
         getBoard,
         dropToken,
@@ -93,8 +105,17 @@ function GameController(
         console.log(`Dropping ${getActivePlayer().name}'s token
         into row ${row} and column ${col}.`);
 
-        board.dropToken
+        board.dropToken(row, col, getActivePlayer().token);
+
+
+
+        switchPlayerTurn();
+        printNewRound();
     }
+    printNewRound();
 
-
+    return{
+        playRound,
+        getActivePlayer
+    }
 }    
