@@ -14,19 +14,24 @@ function GameBoard(){
 
     const getBoard = () => board;
 
-    //first check availability of cells in board
-    const availableCells = board.map((row) => 
-    row.filter((cell) => cell.getValue() === 0)
-    ).flat();
-
     //function to play each round by players
     const dropToken = (row, col, playerToken) => {
+        //first check availability of cells in board
+        const availableCells = board.map((row) => 
+        row.filter((cell) => cell.getValue() === 0)
+        ).flat();
 
         //if no cells then stop execution
         if(!availableCells.length) return;
 
-        //if there are available cell then assign token
-        board[row][col].addToken(playerToken);
+        if(board[row][col].getValue() === 0){
+            //if there are available cell then assign token
+            board[row][col].addToken(playerToken);
+            return true;
+        } else {
+            console.log(`Cell(${row}, ${col}) is already occupied!`);
+            return false;
+        }
     };
 
     //function to print all current values in board array
@@ -43,11 +48,11 @@ function GameBoard(){
     //function to check winner in a specific row
     const rowWinCheck = (row, playerToken) =>{
         for(let j = 0; j < columns; j++){
-            if(board[row][j] !== playerToken){
+            if(board[row][j].getValue() !== playerToken){
                 return false;
             }
-            return true;
         }
+        return true;
     }
 
     //function to check winner in a specific column
@@ -55,15 +60,19 @@ function GameBoard(){
         const columnToCheck = boardColumn(column);
 
         for(let i = 0; i < columnToCheck.length; i++){
-            if(columnToCheck[i] !== playerToken){
+            if(columnToCheck[i].getValue() !== playerToken){
                 return false;
             }
-            return true;
         }
+        return true;
     }
 
     //function to check tie match in all rows
     const rowTieCheck = () =>{
+        //first check availability of cells in board
+        const availableCells = board.map((row) => 
+        row.filter((cell) => cell.getValue() === 0)
+        ).flat();
         if(!availableCells.length){
             if(!rowWinCheck(0, 'X') &&
             !rowWinCheck(1, 'X') &&
@@ -78,6 +87,10 @@ function GameBoard(){
 
     //function to check tie match in all columns
     const colTieCheck = () =>{
+        //first check availability of cells in board
+        const availableCells = board.map((row) => 
+        row.filter((cell) => cell.getValue() === 0)
+        ).flat();
         if(!availableCells.length){
             if(!columnWinCheck(0, 'X') &&
             !columnWinCheck(1, 'X') &&
@@ -93,8 +106,8 @@ function GameBoard(){
     const gameOver = () => {
         console.log("Game Over!");
         for(let i = 0; i < rows; i++){
-            for(let i = 0; i < columns; i++){
-                board[i][j] = 0;
+            for(let j = 0; j < columns; j++){
+                board[i][j].addToken(0);
             }
         }
         printBoard();
@@ -132,6 +145,7 @@ function GameController(
     playerTwoName = "Player Two"
 ){
     const board = GameBoard();
+    let isGameActive = true;
 
     const players = [
         {
@@ -158,16 +172,31 @@ function GameController(
     }
 
     const playRound = (row, col) => {
+        //if isGameActive is false(tie,win) and we call playground again
+        if(!isGameActive){
+            console.log("The game has ended. Please start a new game.");
+            board.printBoard();
+            return;
+        }
+
         console.log(`Dropping ${getActivePlayer().name}'s token
         into row ${row} and column ${col}.`);
 
-        board.dropToken(row, col, getActivePlayer().token);
+        const moveSuccess = board.dropToken(row, col, getActivePlayer().token);
+
+        //if player selects already occupied cell
+        if(!moveSuccess){
+            console.log("Invalid Move. Try Again.");
+            printNewRound();
+            return;
+        }
 
         //check whether current player has combination
         //in mentioned row
         if(board.rowWinCheck(row, getActivePlayer().token)){
-            console.log(`${getActivePlayer().name} wins at row ${row}.`);
             board.printBoard();
+            console.log(`${getActivePlayer().name} wins at row ${row}.`);
+            isGameActive = false;
             board.gameOver();
             return;
         }
@@ -175,19 +204,44 @@ function GameController(
         //check whether current player has combination
         //in mentioned column
         if(board.columnWinCheck(col, getActivePlayer().token)){
-            console.log(`${getActivePlayer().name} wins at column ${r}col`);
             board.printBoard();
+            console.log(`${getActivePlayer().name} wins at column ${col}`);
+            isGameActive = false;
             board.gameOver();
             return;
         }
 
+        //check whether match is tied
+        if(board.rowTieCheck() && board.colTieCheck()){
+            board.printBoard();
+            console.log("Match Tied!")
+            isGameActive = false;
+            board.gameOver();
+            return;
+        }
+
+        
         switchPlayerTurn();
+        printNewRound();   
+    }
+
+    //starting new game
+    const startGame = () => {
+        console.log("Starting new game.....");
+        isGameActive = true;
+        activePlayer = players[0];
         printNewRound();
     }
+
+    //for starting game first time
     printNewRound();
 
     return{
         playRound,
-        getActivePlayer
-    }
+        getActivePlayer,
+        startGame,
+        getBoard: board.getBoard
+    };
 }    
+
+const game = GameController();
