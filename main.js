@@ -244,13 +244,27 @@ function GameController(
     };
 }    
 
-const ScreenController = () =>{
+const ScreenController = () => {
     const game = GameController();
 
     const mainContainer = document.getElementById("container");
     const playerTurn = document.getElementById("turn");
     const mainBoard = document.getElementById("board");
 
-    const board = game.getBoard();
-    const activePlayer = game.getActivePlayer();
+    const updateScreen = () => {
+        mainBoard.textContent = "";
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+    
+        playerTurn.textContent = `${activePlayer.name}'s turn...`;
+
+        for(let i = 0; i < board.length; i++){
+            for(let j = 0; j < board.length; j++){
+                const button = document.createElement("button");
+                button.dataset.row = i;
+                button.dataset.column = j;
+                
+            }
+        }
+    }
 }
