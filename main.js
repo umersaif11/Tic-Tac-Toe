@@ -244,4 +244,9 @@ function GameController(
     };
 }    
 
-const game = GameController();
+const ScreenController = () =>{
+    const game = GameController();
+    const mainContainer = document.getElementById("container");
+    const playerTurn = document.getElementById("turn");
+    const mainBoard = document.getElementById("board");
+}
