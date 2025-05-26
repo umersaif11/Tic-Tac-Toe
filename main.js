@@ -263,7 +263,7 @@ const ScreenController = () => {
                 const button = document.createElement("button");
                 button.dataset.row = i;
                 button.dataset.column = j;
-                
+                button.textContent = board[i][j].getValue();
             }
         }
     }
