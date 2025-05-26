@@ -264,6 +264,7 @@ const ScreenController = () => {
                 button.dataset.row = i;
                 button.dataset.column = j;
                 button.textContent = board[i][j].getValue();
+                mainBoard.appendChild(button);
             }
         }
     }
