@@ -246,7 +246,11 @@ function GameController(
 
 const ScreenController = () =>{
     const game = GameController();
+
     const mainContainer = document.getElementById("container");
     const playerTurn = document.getElementById("turn");
     const mainBoard = document.getElementById("board");
+
+    const board = game.getBoard();
+    const activePlayer = game.getActivePlayer();
 }
