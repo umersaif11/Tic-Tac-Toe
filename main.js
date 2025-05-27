@@ -273,5 +273,7 @@ const ScreenController = () => {
     const clickHandle = (e) => {
         const selectedRow = e.target.dataset.row;
         const selectedColumn = e.target.dataset.column;
+
+        if(!selectedRow || !selectedColumn) return;
     }
 }
