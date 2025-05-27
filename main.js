@@ -172,12 +172,6 @@ function GameController(
     }
 
     const playRound = (row, col) => {
-        //if isGameActive is false(tie,win) and we call playground again
-        if(!isGameActive){
-            console.log("The game has ended. Please start a new game.");
-            board.printBoard();
-            return;
-        }
 
         console.log(`Dropping ${getActivePlayer().name}'s token
         into row ${row} and column ${col}.`);
@@ -191,36 +185,6 @@ function GameController(
             return;
         }
 
-        //check whether current player has combination
-        //in mentioned row
-        if(board.rowWinCheck(row, getActivePlayer().token)){
-            board.printBoard();
-            console.log(`${getActivePlayer().name} wins at row ${row}.`);
-            isGameActive = false;
-            board.gameOver();
-            return;
-        }
-
-        //check whether current player has combination
-        //in mentioned column
-        if(board.columnWinCheck(col, getActivePlayer().token)){
-            board.printBoard();
-            console.log(`${getActivePlayer().name} wins at column ${col}`);
-            isGameActive = false;
-            board.gameOver();
-            return;
-        }
-
-        //check whether match is tied
-        if(board.rowTieCheck() && board.colTieCheck()){
-            board.printBoard();
-            console.log("Match Tied!")
-            isGameActive = false;
-            board.gameOver();
-            return;
-        }
-
-        
         switchPlayerTurn();
         printNewRound();   
     }
@@ -246,18 +210,16 @@ function GameController(
 
 const ScreenController = () => {
     const game = GameController();
+    const gameBoard = GameBoard();
+    let isGameActive = true;
+    const activePlayer = game.getActivePlayer();
+    const board = game.getBoard();
 
     const mainContainer = document.getElementById("container");
     const playerTurn = document.getElementById("turn");
     const mainBoard = document.getElementById("board");
 
-    const updateScreen = () => {
-        mainBoard.textContent = "";
-        const board = game.getBoard();
-        const activePlayer = game.getActivePlayer();
-    
-        playerTurn.textContent = `${activePlayer.name}'s turn...`;
-
+    const updateBoard = () => {
         for(let i = 0; i < board.length; i++){
             for(let j = 0; j < board.length; j++){
                 const button = document.createElement("button");
@@ -269,13 +231,63 @@ const ScreenController = () => {
         }
     }
 
+    const updateScreen = () => {
+        mainBoard.textContent = "";
+    
+        playerTurn.textContent = `${activePlayer.name}'s turn...`;
+
+        updateBoard();
+
+    }
+
     //event listener function
     const clickHandle = (e) => {
+        //if isGameActive is false(tie,win) and we call playground again
+        if(!isGameActive){
+            console.log("The game has ended. Please start a new game.");
+            board.printBoard();
+            return;
+        }
+
+
         const selectedRow = e.target.dataset.row;
         const selectedColumn = e.target.dataset.column;
 
         if(!selectedRow || !selectedColumn) return;
 
         game.playRound(selectedRow,selectedColumn);
+
+        updateScreen();
+
+        //check whether current player has combination
+        //in mentioned row
+        if(gameBoard.rowWinCheck(selectedRow, activePlayer.token)){
+            isGameActive = false;
+            gameBoard.gameOver();
+            updateBoard();
+            playerTurn.textContent = `${activePlayer.name} wins at row ${selectedRow}.`;
+            return;
+        }
+
+        //check whether current player has combination
+        //in mentioned column
+        if(gameBoard.columnWinCheck(selectedColumn, activePlayer.token)){
+            isGameActive = false;
+            gameBoard.gameOver();
+            updateBoard();
+            playerTurn.textContent = `${activePlayer.name} wins at column ${selectedColumn}.`;
+            return;
+        }
+
+        //check whether match is tied
+        if(gameBoard.rowTieCheck() && gameBoard.colTieCheck()){
+            isGameActive = false;
+            gameBoard.gameOver();
+            updateBoard();
+            playerTurn.textContent = "Match Tied!";
+            return;
+        }
+
+    
     }
 }
