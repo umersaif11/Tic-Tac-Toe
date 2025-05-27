@@ -275,5 +275,7 @@ const ScreenController = () => {
         const selectedColumn = e.target.dataset.column;
 
         if(!selectedRow || !selectedColumn) return;
+
+        game.playRound(selectedRow,selectedColumn);
     }
 }
