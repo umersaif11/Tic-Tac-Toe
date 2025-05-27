@@ -268,4 +268,10 @@ const ScreenController = () => {
             }
         }
     }
+
+    //event listener function
+    const clickHandle = (e) => {
+        const selectedRow = e.target.dataset.row;
+        const selectedColumn = e.target.dataset.column;
+    }
 }
