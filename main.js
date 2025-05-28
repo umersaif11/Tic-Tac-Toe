@@ -267,6 +267,7 @@ const ScreenController = () => {
     const mainContainer = document.getElementById("container");
     const playerTurn = document.getElementById("turn");
     const mainBoard = document.getElementById("board");
+    const startGame = document.getElementById("new-game");
 
     const updateBoard = () => {
         const board = game.getBoard();
@@ -344,6 +345,11 @@ const ScreenController = () => {
 
     }
     mainBoard.addEventListener("click", clickHandle);
+
+    startGame.addEventListener("click", () => {
+        game.startGame();
+        updateScreen();
+    })
 
     updateScreen();
 }
