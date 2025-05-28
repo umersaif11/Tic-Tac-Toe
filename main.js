@@ -192,8 +192,8 @@ function GameController(
             printNewRound();
             return{
                 status: "Invalid move",
-                message: "Invalid Move.Cell already occupied."
-            };;
+                message: `Invalid Move.Cell already occupied.${getActivePlayer().name}'s turn.`
+            };
         }
 
         //check whether current player has combination
@@ -202,7 +202,6 @@ function GameController(
             board.printBoard();
             console.log(`${getActivePlayer().name} wins at row ${row}.`);
             isGameActive = false;
-            gameOver();
             return{
                 status: "Row win",
                 message: `${getActivePlayer().name} wins at row ${row}.`
@@ -215,7 +214,6 @@ function GameController(
             board.printBoard();
             console.log(`${getActivePlayer().name} wins at column ${col}`);
             isGameActive = false;
-            gameOver();
             return{
                 status: "Column win",
                 message: `${getActivePlayer().name} wins at column ${col}.`
@@ -227,7 +225,6 @@ function GameController(
             board.printBoard();
             console.log("Match Tied!")
             isGameActive = false;
-            gameOver();
             return{
                 status: "Tie",
                 message: "Match Tied."
@@ -236,7 +233,11 @@ function GameController(
 
         
         switchPlayerTurn();
-        printNewRound();   
+        printNewRound(); 
+        return{
+            status: "Next turn",
+            message: `${getActivePlayer().name}'s turn...`
+        }  
     }
 
     //starting new game
@@ -254,6 +255,7 @@ function GameController(
     return{
         playRound,
         getActivePlayer,
+        gameOver,
         startGame,
         getBoard: board.getBoard
     };
@@ -301,11 +303,49 @@ const ScreenController = () => {
 
         const play = game.playRound(selectedRow,selectedColumn);
 
-        if(play.status === "Game Ended"){
+        if(play.status === "Next turn"){
             playerTurn.textContent = play.message;
-            updateBoard;
+            mainBoard.textContent = "";
+            updateBoard();
         }
 
-        updateScreen();
+        if(play.status === "Game Ended"){
+            playerTurn.textContent = play.message;
+            mainBoard.textContent = "";
+            updateBoard();
+        }
+
+        if(play.status === "Invalid move"){
+            playerTurn.textContent = play.message;
+            mainBoard.textContent = "";
+            updateBoard();
+        }
+
+        if(play.status === "Column win" 
+        || play.status === "Row win" 
+        || play.status === "Tie"){ 
+            playerTurn.textContent = play.message;
+
+            mainBoard.textContent = "";
+
+            updateBoard();
+
+            setTimeout(() => {
+
+                game.gameOver();
+
+                mainBoard.textContent = "";
+
+                updateBoard();
+
+                playerTurn.textContent = "Game Over! Click 'New Game' or refresh."
+            }, 3000)
+        }
+
     }
+    mainBoard.addEventListener("click", clickHandle);
+
+    updateScreen();
 }
+
+ScreenController();
