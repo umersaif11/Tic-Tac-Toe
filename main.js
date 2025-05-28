@@ -267,6 +267,8 @@ const ScreenController = () => {
     const mainBoard = document.getElementById("board");
 
     const updateBoard = () => {
+        const board = game.getBoard();
+
         for(let i = 0; i < board.length; i++){
             for(let j = 0; j < board[i].length; j++){
                 const button = document.createElement("button");
@@ -282,7 +284,7 @@ const ScreenController = () => {
 
     const updateScreen = () => {
         mainBoard.textContent = "";
-        const board = game.getBoard();
+
         const activePlayer = game.getActivePlayer();
     
         playerTurn.textContent = `${activePlayer.name}'s turn...`;
@@ -300,7 +302,8 @@ const ScreenController = () => {
         const play = game.playRound(selectedRow,selectedColumn);
 
         if(play.status === "Game Ended"){
-
+            playerTurn.textContent = play.message;
+            updateBoard;
         }
 
         updateScreen();
