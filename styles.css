@@ -1,3 +1,17 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background: linear-gradient(to bottom right, navy, teal, lightgreen);
+    min-height: 100vh; /* Ensure body fills viewport */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
 #board {
     display: grid;
     height: 500px;
@@ -8,6 +22,7 @@
     gap: 2px;
     padding: 2px;
     background-color: yellow;
+    border-radius: 25px;
   }
   
   .cell {
@@ -15,8 +30,45 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 2rem;
+    font-size: 50px;
     border: 1px solid grey;
     background: lightyellow;
     cursor: pointer;
+    border-radius: 25px;
   }
+  #turn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  #turn{
+    font-size: 35px;
+    font-weight: bolder;
+    color: aliceblue;
+    background-color: black; 
+    border: 3px solid grey;
+    border-radius: 25px;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  #new-game-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+#new-game{
+    padding: 20px;
+    margin: 20px;
+    font-size: 35px;
+    border-radius: 25px;
+    font-weight: bold;
+    background-color: #6a0dad; /* Purple */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
